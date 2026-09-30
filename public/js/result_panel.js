@@ -119,6 +119,7 @@ export function initResultPanel() {
         plain_full_b64: res.plain_full_b64,
         mime_guess: res.mime_guess,
         original_filename: res.filename,
+        integrity_checked: res.integrity ? res.integrity.checked : false,
         integrity_valid: res.integrity ? res.integrity.valid : true
       };
       
@@ -184,7 +185,8 @@ export function initResultPanel() {
       }
       
       // Integrity check
-      if (mode === 'decrypt' && output.integrity_valid === false) {
+      // Only show banner if integrity was actually checked and it failed (i.e. file decrypt)
+      if (mode === 'decrypt' && output.integrity_checked && output.integrity_valid === false) {
         integrityBanner.style.display = 'flex';
       } else {
         integrityBanner.style.display = 'none';
