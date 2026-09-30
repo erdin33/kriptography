@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeri Komponen - Cipher Workbench</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <style>
+    body { padding: 40px; }
+    h1, h2 { margin-bottom: 20px; }
+    .gallery-section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .gallery-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  </style>
+</head>
+<body>
+  <h1>Galeri Komponen Sistem Desain</h1>
+  <button class="btn" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">Toggle Terang/Gelap</button>
+
+  <div class="gallery-section" style="margin-top: 24px;">
+    <h2>1. Buttons</h2>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <button class="btn btn--primary">Primary</button>
+      <button class="btn">Secondary</button>
+      <button class="btn" disabled>Disabled</button>
+      <button class="btn btn--primary" disabled>Processing...</button>
+      <button class="btn btn--icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4"></path>
+          <path d="M12 8h.01"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery-section">
+    <h2>2. Segmented Control & Tabs</h2>
+    <div class="gallery-grid">
+      <div class="panel">
+        <div class="segmented">
+          <input type="radio" name="seg1" id="s1" checked>
+          <label for="s1">Enkripsi</label>
+          <input type="radio" name="seg1" id="s2">
+          <label for="s2">Dekripsi</label>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="tabs-list" role="tablist">
+          <button class="tab" role="tab" aria-selected="true">Huruf</button>
+          <button class="tab" role="tab" aria-selected="false">Base64</button>
+          <button class="tab" role="tab" aria-selected="false">Hex</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-section">
+    <h2>3. Formulir & Validasi</h2>
+    <div class="gallery-grid">
+      <div class="panel">
+        <form class="field">
+          <label class="field-label">Kata Kunci (Normal)</label>
+          <input type="text" class="input mono" placeholder="A-Z">
+          <span class="field-help">Hanya menerima huruf A-Z.</span>
+        </form>
+      </div>
+      <div class="panel">
+        <form class="field has-error">
+          <label class="field-label">Kata Kunci (Error)</label>
+          <input type="text" class="input mono" value="123">
+          <span class="field-help">Hanya menerima huruf A-Z.</span>
+          <span class="field-error">Kunci harus memuat minimal satu huruf.</span>
+        </form>
+      </div>
+      <div class="panel">
+        <form class="field">
+          <label class="field-label">Matrix (Hill)</label>
+          <div class="matrix-grid" style="grid-template-columns: repeat(3, 48px);">
+            <input class="input matrix-input mono" value="1">
+            <input class="input matrix-input mono" value="2">
+            <input class="input matrix-input mono" value="3">
+            <input class="input matrix-input mono" value="4">
+            <input class="input matrix-input mono" value="5">
+            <input class="input matrix-input mono" value="6">
+            <input class="input matrix-input mono" value="7">
+            <input class="input matrix-input mono" value="8">
+            <input class="input matrix-input mono" value="9">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-section">
+    <h2>4. Dropzone & File Card</h2>
+    <div class="gallery-grid">
+      <div class="panel">
+        <div class="dropzone">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Tarik dan letakkan berkas di sini</span>
+          <button class="btn">Pilih Berkas</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="dropzone is-dragover">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Lepaskan untuk mengunggah</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="file-card">
+          <div>
+            <div class="text-body" style="font-weight: 500;">dokumen_rahasia.pdf</div>
+            <div class="text-small text-help">1.2 MB &bull; application/pdf</div>
+          </div>
+          <button class="btn btn--icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-section">
+    <h2>5. Data Block & Banners</h2>
+    <div class="gallery-grid">
+      <div class="panel">
+        <div class="banner banner--danger">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span>Terjadi kesalahan internal server (500).</span>
+        </div>
+        <div class="banner banner--warning" style="margin-top: 16px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Peringatan integritas: Dekripsi mungkin rusak akibat kunci salah.</span>
+        </div>
+        <div class="data-block" style="margin-top: 16px;">
+          QVRUQUNLIEFUIERBV04=
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-section">
+    <h2>6. Collapsible</h2>
+    <div class="panel">
+      <div class="collapsible-header" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
+        <span>Rincian Kunci dan Proses (Klik untuk Buka)</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="collapsible-content">
+        <div class="data-block">
+          Matrix 2x2:
+          [ 3  3 ]
+          [ 2  5 ]
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

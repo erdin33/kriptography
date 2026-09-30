@@ -19,4 +19,12 @@ class App < Sinatra::Base
   get '/' do
     erb :index
   end
+
+  get '/dev/gallery' do
+    if ENV['RACK_ENV'] == 'production'
+      halt 404, "Not Found"
+    else
+      send_file File.join(settings.public_folder, 'dev', 'gallery.html')
+    end
+  end
 end

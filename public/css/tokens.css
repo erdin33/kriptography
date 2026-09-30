@@ -1,0 +1,69 @@
+:root {
+  /* Light mode (default) */
+  --bg: #F3F1EC;
+  --surface: #FBFAF7;
+  --surface-sunken: #ECE9E1;
+  --ink: #1E2226;
+  --ink-muted: #5A6168;
+  --border: #D6D2C7;
+  --border-strong: #B9B4A6;
+  --accent: #2F5D62;
+  --accent-ink: #FFFFFF;
+  --danger: #A4372A;
+  --success: #3C6E47;
+  --warning: #8A6414;
+
+  /* Typography */
+  --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  
+  --transition-fast: 120ms ease-in-out;
+}
+
+[data-theme="dark"] {
+  --bg: #15181B;
+  --surface: #1C2024;
+  --surface-sunken: #121518;
+  --ink: #E6E3DC;
+  --ink-muted: #9AA1A8;
+  --border: #2E343A;
+  --border-strong: #454C53;
+  --accent: #6FA3A8;
+  --accent-ink: #0F1416;
+  --danger: #E0806F;
+  --success: #7DB68A;
+  --warning: #D4A94A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181B;
+    --surface: #1C2024;
+    --surface-sunken: #121518;
+    --ink: #E6E3DC;
+    --ink-muted: #9AA1A8;
+    --border: #2E343A;
+    --border-strong: #454C53;
+    --accent: #6FA3A8;
+    --accent-ink: #0F1416;
+    --danger: #E0806F;
+    --success: #7DB68A;
+    --warning: #D4A94A;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0s;
+  }
+}

@@ -1,10 +1,263 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Cipher Workbench</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cipher Workbench - Praktikum Kriptografi</title>
+  
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  
+  <!-- Skrip Tahap 9 (Akan ditulis nanti) -->
+  <script type="module" src="/js/main.js"></script>
 </head>
 <body>
-    <h1>Cipher Workbench Placeholder</h1>
+
+  <header class="layout-header">
+    <div class="header-brand">
+      <strong>Cipher Workbench</strong>
+      <span class="text-help text-small">Praktikum Kriptografi</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn--icon" aria-label="Tentang" id="btn-about" title="Tentang">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4"></path>
+          <path d="M12 8h.01"></path>
+        </svg>
+      </button>
+      <button class="btn btn--icon" aria-label="Ubah Tema" id="btn-theme" title="Ubah Tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout-main">
+    
+    <!-- KOLOM KIRI: KONFIGURASI -->
+    <section class="col-config">
+      
+      <!-- MODE -->
+      <div class="panel">
+        <div class="segmented">
+          <input type="radio" name="mode" id="mode-encrypt" value="encrypt" checked>
+          <label for="mode-encrypt">Enkripsi</label>
+          <input type="radio" name="mode" id="mode-decrypt" value="decrypt">
+          <label for="mode-decrypt">Dekripsi</label>
+        </div>
+      </div>
+
+      <!-- CIPHER -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="text-panel-title">Cipher</span>
+        </div>
+        <div class="field">
+          <select id="cipher-select" class="select" aria-label="Pilih Cipher">
+            <optgroup label="Klasik 26 Huruf">
+              <option value="vigenere">Vigenere Cipher</option>
+              <option value="autokey">Auto-Key Vigenere</option>
+              <option value="playfair">Playfair Cipher</option>
+              <option value="affine">Affine Cipher</option>
+              <option value="hill">Hill Cipher</option>
+            </optgroup>
+            <optgroup label="ASCII 256 Byte">
+              <option value="extended_vigenere">Extended Vigenere (256)</option>
+              <option value="super">Super Enkripsi</option>
+            </optgroup>
+            <optgroup label="Bonus">
+              <option value="enigma">Enigma M3</option>
+            </optgroup>
+          </select>
+          <div class="text-small text-help" style="margin-top: 4px;">
+            <span id="cipher-domain-badge">26 Huruf</span> &bull; 
+            <span id="cipher-group-badge">Klasik</span>
+          </div>
+          <p class="text-help" id="cipher-summary" style="margin-top: 8px;">
+            Cipher substitusi polialfabetik yang menggunakan kata kunci untuk menggeser karakter.
+          </p>
+        </div>
+      </div>
+
+      <!-- KEY FORM (Dinamis dari js, div penampung statis) -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="text-panel-title">Kunci</span>
+        </div>
+        <form id="key-form" class="field" onsubmit="event.preventDefault();">
+          <label class="field-label" for="key-input">Kata Kunci</label>
+          <input type="text" id="key-input" class="input mono" placeholder="A-Z" required>
+          <span class="field-help">Hanya menerima huruf A-Z.</span>
+          <span class="field-error" id="key-error">Kunci tidak boleh kosong.</span>
+        </form>
+      </div>
+
+      <!-- KEY INFO (Muncul setelah enkripsi/dekripsi sukses) -->
+      <div class="panel" id="key-info-panel" style="display: none;">
+        <div class="panel-header">
+          <span class="text-panel-title text-small">Info Kunci Digunakan</span>
+        </div>
+        <div class="data-block text-small" id="key-info-content">
+          <!-- konten disuntik lewat JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- KOLOM KANAN: DATA -->
+    <section class="col-data">
+      
+      <!-- INPUT -->
+      <div class="panel">
+        <div class="panel-header" style="justify-content: flex-start; gap: 16px;">
+          <span class="text-panel-title">Data Input</span>
+          <div class="segmented" style="width: auto;">
+            <input type="radio" name="input-type" id="in-text" value="text" checked>
+            <label for="in-text">Teks</label>
+            <input type="radio" name="input-type" id="in-file" value="file">
+            <label for="in-file">Berkas</label>
+          </div>
+        </div>
+
+        <!-- Mode Teks -->
+        <div id="input-text-area" class="field">
+          <textarea class="textarea mono" id="input-text" placeholder="Masukkan teks..."></textarea>
+          <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <a href="#" class="text-small" id="load-sample-link">Muat contoh</a>
+            <span class="text-small text-help"><span id="input-text-count">0</span> karakter</span>
+          </div>
+        </div>
+
+        <!-- Mode Berkas (Disembunyikan secara default oleh CSS via tahap 9 atau inline sementara) -->
+        <div id="input-file-area" style="display: none;">
+          <div class="dropzone" id="dropzone">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Tarik dan letakkan berkas di sini atau</span>
+            <button class="btn" type="button" id="btn-select-file">Pilih Berkas</button>
+            <input type="file" id="file-input" style="display: none;">
+          </div>
+          <!-- Kartu berkas terpilih -->
+          <div class="file-card" id="file-card" style="display: none; margin-top: 12px;">
+            <div>
+              <div class="text-body" style="font-weight: 500;" id="file-name">dokumen.pdf</div>
+              <div class="text-small text-help"><span id="file-size">1.2 MB</span> &bull; <span id="file-type">application/pdf</span></div>
+            </div>
+            <button class="btn btn--icon" aria-label="Hapus Berkas" id="btn-clear-file" title="Hapus Berkas">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION BAR -->
+      <div class="action-bar">
+        <button class="btn btn--primary" id="btn-process">Enkripsi</button>
+        <button class="btn" id="btn-clear">Bersihkan</button>
+        <span class="text-small text-help" style="margin-left: auto;">Pintasan: Ctrl+Enter</span>
+      </div>
+
+      <!-- HASIL -->
+      <div class="panel" id="result-panel">
+        <div class="panel-header">
+          <span class="text-panel-title">Hasil</span>
+          <button class="btn btn--icon" aria-label="Salin Hasil" id="btn-copy-result" title="Salin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Error Banner (Tersembunyi) -->
+        <div class="banner banner--danger" id="error-banner" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span id="error-message">Terjadi kesalahan.</span>
+        </div>
+
+        <!-- Integrity Banner (Tersembunyi) -->
+        <div class="banner banner--warning" id="integrity-banner" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Peringatan integritas: Dekripsi mungkin rusak akibat kunci salah.</span>
+        </div>
+
+        <div class="tabs" id="result-tabs">
+          <div class="tabs-list" role="tablist">
+            <button class="tab" role="tab" aria-selected="true" id="tab-letters">Huruf</button>
+            <button class="tab" role="tab" aria-selected="false" id="tab-base64">Base64</button>
+            <button class="tab" role="tab" aria-selected="false" id="tab-hex">Hex</button>
+          </div>
+          
+          <div class="tab-panel active" id="panel-letters" role="tabpanel">
+            <div class="data-block" id="result-data-letters"></div>
+          </div>
+          <div class="tab-panel" id="panel-base64" role="tabpanel" style="display: none;">
+            <div class="data-block" id="result-data-base64"></div>
+          </div>
+          <div class="tab-panel" id="panel-hex" role="tabpanel" style="display: none;">
+            <div class="data-block" id="result-data-hex"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div class="text-small text-help" id="result-meta">
+            <span>0 simbol</span> &bull; <span>Encoding: alpha_filter</span>
+          </div>
+          <a href="#" class="btn btn--primary" id="btn-download" style="display: none;">Unduh cipherteks (.dat)</a>
+        </div>
+      </div>
+
+      <!-- PLAINTEXT B64 (Collapsible) -->
+      <div class="panel" id="plaintext-panel" style="display: none;">
+        <div class="collapsible-header" aria-expanded="false" id="plaintext-toggle">
+          <span>Plainteks (Base64)</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+        <div class="collapsible-content">
+          <div class="data-block" id="plaintext-b64-content"></div>
+        </div>
+      </div>
+
+      <!-- KEY DETAILS (Collapsible) -->
+      <div class="panel" id="key-details-panel" style="display: none;">
+        <div class="collapsible-header" aria-expanded="false" id="key-details-toggle">
+          <span>Rincian Kunci dan Proses</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+        <div class="collapsible-content">
+          <div class="data-block" id="key-details-content"></div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="layout-footer">
+    <span>Berjalan lokal. Kunci dan berkas tidak disimpan di server.</span>
+    <span>v1.0.0</span>
+  </footer>
+
 </body>
 </html>
