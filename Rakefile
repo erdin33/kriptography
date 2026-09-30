@@ -12,13 +12,13 @@ task :server do
 end
 
 desc "Tahap 10: Run roundtrip test"
-task :roundtrip do
-  puts "belum diimplementasikan"
+task :roundtrip => :fixtures do
+  ruby "scripts/roundtrip.rb"
 end
 
 desc "Tahap 10: Generate fixtures"
 task :fixtures do
-  puts "belum diimplementasikan"
+  ruby "scripts/make_fixtures.rb"
 end
 
 task default: :test
