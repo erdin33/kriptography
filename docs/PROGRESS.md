@@ -1,0 +1,16 @@
+# Status Pengerjaan Proyek
+
+| Tahap | Status |
+|---|---|
+| 0. Master Rules & Setup | Selesai |
+| 1. Struktur Proyek | Selesai |
+| 2. Kerangka Cipher | Belum |
+| 3. Classic 26 (Vigenere, dll) | Belum |
+| 4. Math (Modulo, Matrix) | Belum |
+| 5. Affine & Hill | Belum |
+| 6. Enigma | Belum |
+| 7. Ascii 256 & Super Enkripsi | Belum |
+| 8. Antarmuka Web | Belum |
+| 9. Server Logic | Belum |
+| 10. Pengujian Fixture | Belum |
+| 11. Finalisasi & Laporan | Belum |

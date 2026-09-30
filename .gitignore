@@ -1,0 +1,7 @@
+vendor/bundle
+.bundle
+fixtures/generated/
+*.log
+.DS_Store
+tmp/
+coverage/
