@@ -8,7 +8,7 @@
 | 3. Classic 26 (Vigenere, dll) | Selesai |
 | 4. Math (Modulo, Matrix) | Selesai |
 | 5. Affine & Hill | Selesai |
-| 6. Enigma | Belum |
+| 6. Enigma | Selesai |
 | 7. Ascii 256 & Super Enkripsi | Selesai |
 | 8. Antarmuka Web | Belum |
 | 9. Server Logic | Belum |
