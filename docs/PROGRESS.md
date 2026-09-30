@@ -11,6 +11,6 @@
 | 6. Enigma | Selesai |
 | 7. Ascii 256 & Super Enkripsi | Selesai |
 | 8. Antarmuka Web | Belum |
-| 9. Server Logic | Belum |
+| 9. Server Logic | Selesai |
 | 10. Pengujian Fixture | Belum |
 | 11. Finalisasi & Laporan | Belum |

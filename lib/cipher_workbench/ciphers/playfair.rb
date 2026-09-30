@@ -76,7 +76,7 @@ module CipherWorkbench
       end
 
       def encrypt(symbols)
-        process(symbols, dir: 1)
+        process(prepare(symbols), dir: 1)
       end
 
       def decrypt(symbols)

@@ -3,7 +3,7 @@ module CipherWorkbench
     class ShiftLetters < Base
       def self.id; 'shift_letters'; end
       def self.title; 'Shift Letters Test'; end
-      def self.group; :classic26; end
+      def self.group; :internal; end
       def self.domain; :letters; end
       def self.summary; 'Test cipher'; end
       def self.fields; []; end
@@ -29,7 +29,7 @@ module CipherWorkbench
     class ShiftBytes < Base
       def self.id; 'shift_bytes'; end
       def self.title; 'Shift Bytes Test'; end
-      def self.group; :ascii256; end
+      def self.group; :internal; end
       def self.domain; :bytes; end
       def self.summary; 'Test cipher'; end
       def self.fields; []; end

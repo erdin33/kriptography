@@ -78,7 +78,7 @@ module CipherWorkbench
       end
 
       def encrypt(symbols)
-        process(symbols, @matrix)
+        process(prepare(symbols), @matrix)
       end
 
       def decrypt(symbols)
