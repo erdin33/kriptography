@@ -106,12 +106,27 @@ export function initResultPanel() {
     },
     
     renderResult: (res, mode, activeCipher) => {
-      const output = res.output;
+      // Normalize output between encrypt and decrypt
+      const output = mode === 'encrypt' ? res.output : {
+        letters: res.text,
+        base64: res.plain_base64,
+        hex: res.plain_base64 ? res.plain_base64 : '', // Need to derive hex if missing? Or just skip
+        letters_truncated: res.plain_truncated,
+        base64_truncated: res.plain_truncated,
+        hex_truncated: res.plain_truncated,
+        symbols_count: res.plain_total_bytes,
+        container_b64: res.container_b64,
+        plain_full_b64: res.plain_full_b64,
+        mime_guess: res.mime_guess,
+        original_filename: res.filename,
+        integrity_valid: res.integrity ? res.integrity.valid : true
+      };
+      
       const inp = res.input;
       
       // Update data
-      dataBase64.textContent = output.base64;
-      dataHex.textContent = output.hex;
+      dataBase64.textContent = output.base64 || '';
+      dataHex.textContent = mode === 'decrypt' ? '' : (output.hex || '');
       
       if (output.letters) {
         dataLetters.textContent = output.letters;
@@ -127,26 +142,26 @@ export function initResultPanel() {
       meta.innerHTML = `<span>${output.symbols_count || output.symbol_count || 0} simbol</span> &bull; <span>Encoding: ${activeCipher ? activeCipher.group : 'unknown'}</span>${truncated ? ' &bull; <span style="color:var(--warning)">[Terpotong untuk tampilan]</span>' : ''}`;
       
       // Container Download (Encrypt)
-      if (mode === 'encrypt' && output.container_b64) {
+      if (mode === 'encrypt' && res.container_b64) {
         btnDownload.style.display = 'inline-flex';
-        const bytes = decodeBase64ToUint8Array(output.container_b64);
+        const bytes = decodeBase64ToUint8Array(res.container_b64);
         
         if (activeDownloadUrl) revokeBlobUrl(activeDownloadUrl);
         activeDownloadUrl = createBlobUrl(bytes, 'application/octet-stream');
         
         btnDownload.href = activeDownloadUrl;
-        btnDownload.download = output.suggested_filename || 'cipher_output.dat';
+        btnDownload.download = res.suggested_filename || 'cipher_output.dat';
         btnDownload.textContent = 'Unduh cipherteks (.dat)';
-      } else if (mode === 'decrypt' && output.plain_full_b64) {
+      } else if (mode === 'decrypt' && res.plain_full_b64) {
         // Plaintext File Download
         btnDownload.style.display = 'inline-flex';
-        const bytes = decodeBase64ToUint8Array(output.plain_full_b64);
+        const bytes = decodeBase64ToUint8Array(res.plain_full_b64);
         
         if (activeDownloadUrl) revokeBlobUrl(activeDownloadUrl);
-        activeDownloadUrl = createBlobUrl(bytes, output.mime_guess || 'application/octet-stream');
+        activeDownloadUrl = createBlobUrl(bytes, res.mime_guess || 'application/octet-stream');
         
         btnDownload.href = activeDownloadUrl;
-        btnDownload.download = sanitizeFilename(output.original_filename || 'decrypted_file');
+        btnDownload.download = sanitizeFilename(res.filename || 'decrypted_file');
         btnDownload.textContent = 'Unduh dengan nama asli';
         
         // Render preview if media
