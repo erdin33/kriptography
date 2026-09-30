@@ -117,9 +117,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           res = await apiDecrypt(cipher.id, params, 'container', state.fileInput, null);
         } else {
           if (!state.textInput) throw new Error('Teks kosong.');
-          // Untuk teks dekripsi, asumsikan text_format = 'letters' jika domain letters, else base64
-          // Di soal ada toggle, tapi kita sederhanakan
-          const fmt = cipher.domain === 'letters' ? 'letters' : 'base64';
+          // Gunakan format teks dari radio button format (letters, base64, hex)
+          const fmtNode = document.querySelector('input[name="decrypt-format"]:checked');
+          const fmt = fmtNode ? fmtNode.value : (cipher.domain === 'letters' ? 'letters' : 'base64');
           res = await apiDecrypt(cipher.id, params, 'text', fmt, state.textInput);
         }
       }
@@ -163,8 +163,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Reactive updates
   subscribe((s) => {
     btnProcess.textContent = s.mode === 'encrypt' ? 'Enkripsi' : 'Dekripsi';
-    if (s.isProcessing) {
-      // handled locally
+    const decryptFormatArea = byId('decrypt-format-area');
+    if (decryptFormatArea) {
+      decryptFormatArea.style.display = (s.mode === 'decrypt' && s.inputType === 'text') ? 'block' : 'none';
     }
   });
 });

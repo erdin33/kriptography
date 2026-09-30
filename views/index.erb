@@ -126,6 +126,19 @@
         <!-- Mode Teks -->
         <div id="input-text-area" class="field">
           <textarea class="textarea mono" id="input-text" placeholder="Masukkan teks..."></textarea>
+          
+          <div id="decrypt-format-area" style="display: none; margin-top: 8px;">
+            <label class="field-label text-small">Format Teks Cipher:</label>
+            <div class="segmented" style="width: 100%; margin-top: 4px;">
+              <input type="radio" name="decrypt-format" id="fmt-letters" value="letters" checked>
+              <label for="fmt-letters">Huruf</label>
+              <input type="radio" name="decrypt-format" id="fmt-base64" value="base64">
+              <label for="fmt-base64">Base64</label>
+              <input type="radio" name="decrypt-format" id="fmt-hex" value="hex">
+              <label for="fmt-hex">Hex</label>
+            </div>
+          </div>
+
           <div style="display: flex; justify-content: space-between; margin-top: 4px;">
             <a href="#" class="text-small" id="load-sample-link">Muat contoh</a>
             <span class="text-small text-help"><span id="input-text-count">0</span> karakter</span>
