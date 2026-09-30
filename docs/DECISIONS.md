@@ -63,3 +63,5 @@ Bahasa Indonesia. Tampilan tenang, sederhana, dan profesional (bukan tampilan ge
 
 ## D15. Asumsi Tambahan
 - Untuk Affine Cipher (Tahap 3), parameter `a` dan `b` dinormalisasi secara matematis (modulo 26) sebelum divalidasi. Hal ini menyebabkan nilai negatif seperti `b = -3` akan dianggap sah dan setara dengan `23`, serta nilai `a = 27` akan dianggap sah dan setara dengan `1`.
+- Untuk Playfair Cipher (Tahap 4), persiapan (`prepare`) mengubah J menjadi I, menyisipkan `X` di antara dua huruf kembar (atau `Q` bila huruf kembarnya adalah `X`), dan memastikan panjang genap dengan menambahkan `X` di akhir (atau `Q` jika berakhiran `X`). Sisipan/tambahan tersebut tidak dihapus saat dekripsi.
+- Untuk Hill Cipher (Tahap 4), persiapan (`prepare`) menambahkan huruf `X` (23) di akhir blok sehingga kelipatan dari matriks $n \times n$. Tambahan X ini tetap ada pada saat dekripsi di mode `alpha_filter`.
