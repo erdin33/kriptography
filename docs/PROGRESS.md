@@ -9,7 +9,7 @@
 | 4. Math (Modulo, Matrix) | Selesai |
 | 5. Affine & Hill | Selesai |
 | 6. Enigma | Belum |
-| 7. Ascii 256 & Super Enkripsi | Belum |
+| 7. Ascii 256 & Super Enkripsi | Selesai |
 | 8. Antarmuka Web | Belum |
 | 9. Server Logic | Belum |
 | 10. Pengujian Fixture | Belum |
