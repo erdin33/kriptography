@@ -5,7 +5,7 @@
 | 0. Master Rules & Setup | Selesai |
 | 1. Struktur Proyek | Selesai |
 | 2. Kerangka Cipher | Selesai |
-| 3. Classic 26 (Vigenere, dll) | Belum |
+| 3. Classic 26 (Vigenere, dll) | Selesai |
 | 4. Math (Modulo, Matrix) | Belum |
 | 5. Affine & Hill | Belum |
 | 6. Enigma | Belum |

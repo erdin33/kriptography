@@ -62,4 +62,4 @@ Model M3: rotor I sampai V, reflektor B dan C, ring setting, posisi awal, plugbo
 Bahasa Indonesia. Tampilan tenang, sederhana, dan profesional (bukan tampilan generik "AI"). Detail pada Tahap 8.
 
 ## D15. Asumsi Tambahan
-(diisi agen bila ada; saat ini kosong)
+- Untuk Affine Cipher (Tahap 3), parameter `a` dan `b` dinormalisasi secara matematis (modulo 26) sebelum divalidasi. Hal ini menyebabkan nilai negatif seperti `b = -3` akan dianggap sah dan setara dengan `23`, serta nilai `a = 27` akan dianggap sah dan setara dengan `1`.
