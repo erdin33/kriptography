@@ -5,7 +5,8 @@ async function doFetch(url, options = {}) {
     activeController.abort();
   }
   
-  activeController = new AbortController();
+  const currentController = new AbortController();
+  activeController = currentController;
   options.signal = activeController.signal;
   
   try {
@@ -39,7 +40,9 @@ async function doFetch(url, options = {}) {
     }
     throw err;
   } finally {
-    activeController = null;
+    if (activeController === currentController) {
+      activeController = null;
+    }
   }
 }
 

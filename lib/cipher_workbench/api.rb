@@ -105,6 +105,7 @@ module CipherWorkbench
       
       if input_type == 'text'
         txt = params[:text]
+        txt = txt.gsub("\r\n", "\n") if txt
         halt 400, JSON.generate({ ok: false, error: 'invalid_input', field: 'text', message: 'Teks wajib diisi' }) if txt.nil?
         if txt.bytesize > MAX_UPLOAD_BYTES
           halt 413, JSON.generate({ ok: false, error: 'payload_too_large', message: 'Teks melebihi batas ukuran' })
@@ -195,6 +196,7 @@ module CipherWorkbench
         source_hash[:bytes] = file_bytes
       else
         txt = params[:text]
+        txt = txt.gsub("\r\n", "\n") if txt
         halt 400, JSON.generate({ ok: false, error: 'invalid_input', field: 'text', message: 'Teks wajib diisi' }) if txt.nil?
         if txt.bytesize > MAX_UPLOAD_BYTES
           halt 413, JSON.generate({ ok: false, error: 'payload_too_large', message: 'Teks melebihi batas' })

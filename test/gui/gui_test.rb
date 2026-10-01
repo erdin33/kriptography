@@ -45,7 +45,7 @@ class GuiTest < Minitest::Test
     files.select! { |f| File.file?(f) }
     
     files.each do |file|
-      content = File.read(file)
+      content = File.read(file, mode: 'rb').encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
       # Cari http:// atau https://
       urls = content.scan(/https?:\/\/[a-zA-Z0-9\-\.]+/i)
       # Abaikan link w3.org (svg namespace)

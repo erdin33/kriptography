@@ -153,6 +153,7 @@ module CipherWorkbench
             if kind == :text
               text = plain_bytes.dup.force_encoding('UTF-8')
               text_valid = text.valid_encoding?
+              text = text.scrub unless text_valid
             else
               text = nil
               text_valid = false
