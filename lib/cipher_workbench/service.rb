@@ -127,8 +127,9 @@ module CipherWorkbench
             else
               # nibble16
               plain_bytes = Codec::LetterCodec.nibble_decode(plain_letters, byte_length: header.plain_length)
-              text = nil
-              text_valid = false
+              text_cand = plain_bytes.dup.force_encoding('UTF-8')
+              text_valid = text_cand.valid_encoding?
+              text = text_valid ? text_cand : nil
               
               calc_sha = Digest::SHA256.digest(plain_bytes)
               if calc_sha != header.plain_sha256
@@ -150,14 +151,9 @@ module CipherWorkbench
               valid = false
             end
             
-            if kind == :text
-              text = plain_bytes.dup.force_encoding('UTF-8')
-              text_valid = text.valid_encoding?
-              text = text.scrub unless text_valid
-            else
-              text = nil
-              text_valid = false
-            end
+            text_cand = plain_bytes.dup.force_encoding('UTF-8')
+            text_valid = text_cand.valid_encoding?
+            text = text_valid ? text_cand : nil
           end
 
           integrity = { checked: true, valid: valid }

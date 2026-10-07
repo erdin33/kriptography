@@ -64,6 +64,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateCipherUI();
   });
   
+  function updateDecryptFormatOptions(cipher) {
+    if (!cipher) return;
+    const fmtLetters = byId('fmt-letters');
+    const fmtLettersLabel = document.querySelector('label[for="fmt-letters"]');
+    const fmtHex = byId('fmt-hex');
+    if (fmtLetters && fmtLettersLabel) {
+      if (cipher.domain === 'bytes') {
+        fmtLetters.disabled = true;
+        fmtLettersLabel.style.display = 'none';
+        if (fmtLetters.checked && fmtHex) {
+          fmtHex.checked = true;
+        }
+      } else {
+        fmtLetters.disabled = false;
+        fmtLettersLabel.style.display = '';
+      }
+    }
+  }
+
   function updateCipherUI() {
     const cipher = getActiveCipher();
     if (!cipher) return;
@@ -74,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     buildSchemaForm(cipher.fields, cipher.id);
     resultPanel.clear();
+    updateDecryptFormatOptions(cipher);
   }
   
   // Key Details toggle binding
@@ -166,6 +186,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const decryptFormatArea = byId('decrypt-format-area');
     if (decryptFormatArea) {
       decryptFormatArea.style.display = (s.mode === 'decrypt' && s.inputType === 'text') ? 'block' : 'none';
+    }
+    const cipher = getActiveCipher();
+    if (cipher) {
+      updateDecryptFormatOptions(cipher);
     }
   });
 });

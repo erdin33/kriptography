@@ -220,15 +220,22 @@ module CipherWorkbench
       
       plain_trunc, is_plain_trunc = Codec::Views.truncate(res.plain_bytes, limit: DISPLAY_LIMIT_BYTES)
       
+      out_text = res.text
+      if out_text
+        out_text, _ = Codec::Views.truncate(out_text, limit: DISPLAY_LIMIT_BYTES)
+        out_text = out_text.scrub unless out_text.valid_encoding?
+      end
+      
       ret = {
         ok: true,
         cipher: cipher_id,
         kind: res.kind.to_s,
         encoding: res.encoding.to_s,
         filename: res.filename,
-        text: res.text,
+        text: out_text,
         text_valid: res.text_valid,
         plain_base64: Codec::Views.base64(plain_trunc),
+        plain_hex: Codec::Views.hex(plain_trunc),
         plain_truncated: is_plain_trunc,
         plain_total_bytes: res.plain_bytes.bytesize,
         mime_guess: mime_guess,

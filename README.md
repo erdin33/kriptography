@@ -1,75 +1,224 @@
 # Cipher Workbench - UTS Kriptografi
 
-Cipher Workbench adalah instrumen kriptografi komprehensif untuk pengujian dan evaluasi algoritma enkripsi klasik (domain huruf) hingga enkripsi lanjut (domain byte). Dirancang khusus sebagai pemenuhan spesifikasi UTS Mata Kuliah Kriptografi S1 Informatika.
+Cipher Workbench merupakan aplikasi sederhana berbasis Ruby dan Sinatra yang digunakan untuk mencoba beberapa algoritma kriptografi. Aplikasi ini dibuat untuk memenuhi tugas UTS Mata Kuliah Kriptografi pada Program Studi Informatika.
 
-## Fitur Tersedia
-Sesuai naskah UTS:
-a. **Vigenere Cipher** (Domain Huruf)
-b. **Auto-Key Vigenere Cipher** (Domain Huruf)
-c. **Extended Vigenere Cipher** (256 ASCII / Domain Byte)
-d. **Playfair Cipher** (Domain Huruf)
-e. **Affine Cipher** (Domain Huruf)
-f. **Hill Cipher** (Domain Huruf, Matriks Dinamis)
-g. **Cipher Transposisi Kolom** (Tersedia internal, digabung di Super Enkripsi)
-h. **Super Enkripsi** (Kombinasi Extended Vigenere + Transposisi Kolom, Domain Byte)
-i. **Enigma M3 Cipher** (Bonus) (Domain Huruf, simulasi presisi Wehrmacht)
+Algoritma yang tersedia mencakup cipher klasik berbasis alfabet dan cipher yang bekerja pada data berbasis byte. Aplikasi juga mendukung proses enkripsi dan dekripsi teks maupun berkas.
+
+## Fitur
+
+Algoritma yang tersedia:
+
+* **Vigenere Cipher** — domain alfabet 26
+* **Auto-Key Vigenere Cipher** — domain alfabet 26
+* **Extended Vigenere Cipher** — domain byte 0–255
+* **Playfair Cipher** — domain alfabet 26
+* **Affine Cipher** — domain alfabet 26
+* **Hill Cipher** — domain alfabet 26 dengan ukuran matriks yang dapat disesuaikan
+* **Cipher Transposisi Kolom** — digunakan sebagai bagian dari Super Enkripsi
+* **Super Enkripsi** — kombinasi Extended Vigenere dan Transposisi Kolom
+* **Enigma M3 Cipher** — fitur tambahan untuk simulasi Enigma
+
+Aplikasi dapat digunakan untuk memproses teks maupun berkas, tergantung pada jenis cipher yang dipilih.
 
 ## Kebutuhan Sistem
-- **Ruby**: Versi yang telah teruji adalah Ruby 3.1, 3.2, dan 3.3.0.
-- **Sistem Operasi**: Teruji secara intensif pada macOS dan Linux. (Sistem Windows belum diverifikasi secara langsung).
-- **Gem**: Bundler.
+
+Sebelum menjalankan aplikasi, pastikan perangkat sudah memiliki:
+
+* Ruby 3.1, 3.2, atau 3.3
+* Bundler
+* Sistem operasi Linux atau macOS
+
+Windows belum banyak diuji dalam pengembangan aplikasi ini.
 
 ## Instalasi
-Jalankan perintah ini di terminal:
+
+Clone repository terlebih dahulu, kemudian masuk ke direktori proyek.
+
 ```bash
 bundle install
 ```
 
-## Cara Menjalankan
+Perintah tersebut digunakan untuk memasang dependency yang dibutuhkan oleh aplikasi.
+
+## Menjalankan Aplikasi
+
+Jalankan server Sinatra dengan perintah:
+
 ```bash
-# Menjalankan server pada port default (4567)
 bundle exec rackup -p 4567
 ```
-Buka browser pada alamat `http://127.0.0.1:4567` untuk mengakses antarmuka pengguna.
 
-## Pengujian (Unit & E2E)
+Setelah server berjalan, buka browser dan akses:
+
+```text
+http://127.0.0.1:4567
+```
+
+## Pengujian
+
+Beberapa perintah telah disediakan untuk membantu proses pengujian aplikasi.
+
+Membuat berkas yang digunakan untuk pengujian:
+
 ```bash
-# Membuat berkas dummy untuk tes (otomatis di fixtures/generated)
 bundle exec rake fixtures
+```
 
-# Uji integrasi, QA API, serta kriptanalisis (Ruby)
+Menjalankan pengujian:
+
+```bash
 bundle exec rake test
+```
 
-# Uji Round-Trip (Enkripsi -> Wadah -> Dekripsi) semua cipher
+Menjalankan pengujian enkripsi dan dekripsi secara berulang untuk setiap cipher:
+
+```bash
 bundle exec rake roundtrip
 ```
 
-## Struktur Direktori
-- `app.rb`: Entrypoint aplikasi web Sinatra.
-- `lib/cipher_workbench/`: Inti algoritma matematis kriptografi.
-- `lib/cipher_workbench/ciphers/`: Definisi masing-masing metode cipher (Vigenere, Hill, dll).
-- `public/js/`: Kumpulan kode sumber *Frontend JavaScript murni (ES Modules)*.
-- `views/`: Kerangka layout ERB untuk antarmuka.
-- `docs/`: Laporan-laporan progres dan referensi keputusan arsitektur.
-- `fixtures/`: Area unggahan berkas nyata dan palsu untuk pengetesan.
-- `test/`: Pengetesan Minitest.
+Pengujian *round-trip* digunakan untuk memastikan data yang telah dienkripsi dapat dikembalikan ke bentuk semula setelah proses dekripsi.
 
-## Panduan Penggunaan GUI
-1. **Enkripsi Teks**: Pilih algoritma, klik mode **Teks Ketikan**, ketik kalimat Anda, dan isikan Form Kunci Kriptografi.
-2. **Enkripsi Berkas**: Pilih mode **Unggah Berkas**, seret/jatuhkan file gambar, audio, atau dokumen. Isi Kunci, kemudian klik **Proses**. Unduh wadah (`.dat`) bila selesai.
-3. **Dekripsi Teks**: Untuk teks, masukkan cipherteks ke panel input teks.
-4. **Dekripsi Berkas**: Untuk berkas `.dat`, cukup seret berkas ke area drop zone, isikan kunci, dan klik proses. Berkas akan terunduh kembali dalam nama aslinya.
-5. **Cara menambah berkas nyata untuk uji**: Letakkan berkas gambar/suara/video apa saja di folder `fixtures/manual/` dan jalankan `bundle exec rake roundtrip`.
+## Struktur Direktori
+
+```text
+.
+├── app.rb
+├── lib/
+│   └── cipher_workbench/
+│       └── ciphers/
+├── public/
+│   └── js/
+├── views/
+├── docs/
+├── fixtures/
+└── test/
+```
+
+Keterangan beberapa direktori utama:
+
+* `app.rb` — file utama untuk menjalankan aplikasi Sinatra.
+* `lib/cipher_workbench/` — bagian utama yang berisi logika aplikasi dan algoritma kriptografi.
+* `lib/cipher_workbench/ciphers/` — implementasi dari masing-masing algoritma cipher.
+* `public/js/` — kode JavaScript yang digunakan pada antarmuka web.
+* `views/` — file tampilan menggunakan ERB.
+* `docs/` — dokumentasi dan catatan pengembangan.
+* `fixtures/` — berkas yang digunakan untuk kebutuhan pengujian.
+* `test/` — kumpulan pengujian menggunakan Minitest.
+
+## Cara Menggunakan
+
+### 1. Enkripsi Teks
+
+Pilih algoritma yang ingin digunakan, kemudian pilih mode **Teks Ketikan**. Masukkan teks dan kunci yang diperlukan, lalu jalankan proses enkripsi.
+
+### 2. Enkripsi Berkas
+
+Pilih mode **Unggah Berkas**, kemudian pilih atau seret berkas ke area yang tersedia. Masukkan kunci dan jalankan proses.
+
+Hasil enkripsi berkas dapat disimpan dalam bentuk wadah `.dat`.
+
+### 3. Dekripsi Teks
+
+Masukkan cipherteks pada bagian input teks. Pilih algoritma yang sesuai dan masukkan kunci yang digunakan saat proses enkripsi.
+
+### 4. Dekripsi Berkas
+
+Unggah berkas `.dat` hasil enkripsi, kemudian masukkan kunci yang sesuai. Setelah proses berhasil, berkas akan dikembalikan ke bentuk aslinya.
+
+### 5. Menambahkan Berkas untuk Pengujian
+
+Untuk melakukan pengujian menggunakan berkas sendiri, letakkan berkas pada:
+
+```text
+fixtures/manual/
+```
+
+Kemudian jalankan:
+
+```bash
+bundle exec rake roundtrip
+```
 
 ## Variabel Lingkungan
-- `PORT` (Default: 4567): Port web server.
-- `MAX_UPLOAD_MB` (Default: 25): Batasan kapasitas muatan (dalam MB) yang diproses server.
-- `RACK_ENV` (Default: development): Profil lingkungan eksekusi Rack.
+
+Aplikasi menyediakan beberapa variabel lingkungan yang dapat diubah sesuai kebutuhan:
+
+| Variabel        |       Default | Keterangan                                 |
+| --------------- | ------------: | ------------------------------------------ |
+| `PORT`          |        `4567` | Port yang digunakan server                 |
+| `MAX_UPLOAD_MB` |          `25` | Ukuran maksimum berkas yang dapat diunggah |
+| `RACK_ENV`      | `development` | Lingkungan eksekusi Rack                   |
+
+Contoh:
+
+```bash
+PORT=3000 bundle exec rackup
+```
 
 ## Keamanan dan Keterbatasan
-- **Peringatan Kriptografi**: Cipher klasik seperti Playfair, Affine, dan Vigenere TIDAK AMAN untuk standar modern dan sangat rentan terhadap kriptanalisis (frekuensi, serangan ekshaustif). Cipher ini dibuat murni untuk edukasi.
-- **Metadata Wadah Kriptografi (Container)**: Header container berisi nama file asli, ukuran asli, dan jenis hash SHA-256 (yang tidak dienkripsi melainkan tersimpan sebagai _plaintext byte_) yang ditujukan murni sebagai bahan verifikasi tebakan kunci pasca-dekripsi.
-- **Keterbatasan Kecepatan**: Berkas > 5MB mungkin lamban pada cipher yang iteratif bit-per-bit (e.g. Hill dan Enigma).
+
+Aplikasi ini dibuat untuk keperluan pembelajaran sehingga algoritma yang tersedia tidak semuanya ditujukan untuk penggunaan keamanan pada sistem nyata.
+
+* **Cipher klasik** seperti Vigenere, Playfair, dan Affine memiliki kelemahan terhadap berbagai metode kriptanalisis. Algoritma tersebut digunakan untuk memahami konsep dasar kriptografi.
+* **Metadata berkas** pada wadah `.dat` digunakan untuk membantu proses pengembalian berkas setelah dekripsi.
+* **HMAC-SHA256** digunakan untuk membantu memeriksa integritas data pada wadah hasil enkripsi.
+* Proses pada beberapa algoritma dapat menjadi lebih lambat ketika ukuran berkas semakin besar, terutama pada algoritma yang melakukan operasi secara berulang.
 
 ## Lisensi
-Aplikasi ini dikembangkan untuk penyelesaian UTS, hak cipta mengikuti dosen pengampu.
+
+Proyek ini dibuat untuk memenuhi tugas UTS Mata Kuliah Kriptografi. Penggunaan dan pengembangan lebih lanjut disesuaikan dengan kebutuhan perkuliahan.
+
+
+
+module CipherWorkbench
+  module Ciphers
+    class ExtendedVigenere < Base
+      def self.id; 'extended_vigenere'; end
+      def self.title; 'Extended Vigenere Cipher'; end
+      def self.group; :ascii256; end
+      def self.domain; :bytes; end
+      def self.summary; 'Varian Vigenere yang beroperasi pada tingkat byte (256 nilai), bukan hanya huruf. Karena dapat mengenkripsi karakter apa pun termasuk data biner murni, cipher ini cocok digunakan untuk mengenkripsi berkas.'; end
+
+      def self.fields
+        [
+          {
+            name: 'key',
+            type: 'text',
+            label: 'Kunci',
+            help: 'Kunci teks bebas, akan diubah menjadi representasi byte UTF-8.'
+          }
+        ]
+      end
+
+      def validate_key!
+        key_str = @params[:key] || @params['key'] || ""
+        @key_bytes = key_str.dup.force_encoding('UTF-8').bytes
+        
+        if @key_bytes.empty?
+          raise InvalidKeyError.new("Kunci tidak boleh kosong", field: 'key')
+        end
+      end
+
+      def encrypt(symbols)
+        m = @key_bytes.length
+        symbols.map.with_index do |p, i|
+          (p + @key_bytes[i % m]) % 256
+        end
+      end
+
+      def decrypt(symbols)
+        m = @key_bytes.length
+        symbols.map.with_index do |c, i|
+          (c - @key_bytes[i % m]) % 256
+        end
+      end
+
+      def describe_key
+        {
+          key_bytes_hex: Codec::Views.hex(@key_bytes.pack('C*')),
+          length: @key_bytes.length
+        }
+      end
+    end
+  end
+end

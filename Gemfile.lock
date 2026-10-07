@@ -37,6 +37,7 @@ GEM
 PLATFORMS
   arm64-darwin-23
   ruby
+  x64-mingw-ucrt
 
 DEPENDENCIES
   minitest

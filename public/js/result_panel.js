@@ -106,11 +106,40 @@ export function initResultPanel() {
     },
     
     renderResult: (res, mode, activeCipher) => {
+      let hexValue = '';
+      let lettersValue = '';
+      if (mode === 'encrypt') {
+        hexValue = res.output ? res.output.hex : '';
+        lettersValue = res.output ? res.output.letters : '';
+      } else {
+        if (res.plain_hex) {
+          hexValue = res.plain_hex;
+        } else if (res.plain_base64) {
+          try {
+            const bytes = decodeBase64ToUint8Array(res.plain_base64);
+            hexValue = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+          } catch (e) {
+            hexValue = '';
+          }
+        }
+
+        if (res.text !== undefined && res.text !== null) {
+          lettersValue = res.text;
+        } else if (res.plain_base64) {
+          try {
+            const bytes = decodeBase64ToUint8Array(res.plain_base64);
+            lettersValue = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+          } catch (e) {
+            lettersValue = '';
+          }
+        }
+      }
+
       // Normalize output between encrypt and decrypt
       const output = mode === 'encrypt' ? res.output : {
-        letters: res.text,
+        letters: lettersValue,
         base64: res.plain_base64,
-        hex: res.plain_base64 ? res.plain_base64 : '', // Need to derive hex if missing? Or just skip
+        hex: hexValue,
         letters_truncated: res.plain_truncated,
         base64_truncated: res.plain_truncated,
         hex_truncated: res.plain_truncated,
@@ -126,13 +155,23 @@ export function initResultPanel() {
       const inp = res.input;
       
       // Update data
+      dataLetters.textContent = output.letters || '';
       dataBase64.textContent = output.base64 || '';
-      dataHex.textContent = mode === 'decrypt' ? '' : (output.hex || '');
+      dataHex.textContent = output.hex || '';
       
-      if (output.letters) {
-        dataLetters.textContent = output.letters;
+      const hasMediaPreview = mode === 'decrypt' && output.mime_guess && (
+        output.mime_guess.startsWith('image/') ||
+        output.mime_guess.startsWith('audio/') ||
+        output.mime_guess.startsWith('video/')
+      );
+
+      if (output.letters !== null && output.letters !== undefined && (output.letters !== '' || mode === 'decrypt')) {
         tabLetters.style.display = 'block';
-        activateTab('letters');
+        if (hasMediaPreview) {
+          activateTab('base64');
+        } else {
+          activateTab('letters');
+        }
       } else {
         tabLetters.style.display = 'none';
         activateTab('base64');

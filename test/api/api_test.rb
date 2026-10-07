@@ -80,6 +80,7 @@ class ApiTest < Minitest::Test
       assert_equal 200, last_response.status, "Failed decrypt container #{c_id}: #{last_response.body}"
       dec_data = JSON.parse(last_response.body)
       assert_equal 'HELO', dec_data['text']
+      assert_equal 'HELO'.unpack1('H*'), dec_data['plain_hex']
       
       # DECRYPT TEXT (LETTERS)
       post '/api/decrypt', {
@@ -92,6 +93,7 @@ class ApiTest < Minitest::Test
       assert_equal 200, last_response.status, "Failed decrypt text #{c_id}: #{last_response.body}"
       dec_txt_data = JSON.parse(last_response.body)
       assert_equal 'HELO', dec_txt_data['text']
+      assert_equal 'HELO'.unpack1('H*'), dec_txt_data['plain_hex']
     end
   end
 
@@ -130,6 +132,39 @@ class ApiTest < Minitest::Test
     assert_equal 'image/jpeg', dec_data['mime_guess']
     assert_equal true, dec_data['integrity']['valid']
     assert_equal [bytes].pack('m0'), dec_data['plain_full_b64']
+    assert_equal bytes.unpack1('H*'), dec_data['plain_hex']
+    assert_equal 'test file data', dec_data['text']
+    assert_equal true, dec_data['text_valid']
+  end
+
+  def test_roundtrip_file_letters_domain
+    c_id = 'vigenere'
+    key_params = { key: 'SECRET' }
+    bytes = "Halo Kriptografi!".b
+    file = Rack::Test::UploadedFile.new(StringIO.new(bytes), 'text/plain', original_filename: 'pesan.txt')
+
+    post '/api/encrypt', {
+      cipher: c_id,
+      params: key_params.to_json,
+      input_type: 'file',
+      file: file
+    }
+    assert_equal 200, last_response.status
+    container = JSON.parse(last_response.body)['container_b64'].unpack1('m0')
+
+    c_file = Rack::Test::UploadedFile.new(StringIO.new(container), 'application/octet-stream', original_filename: 'pesan.txt.dat')
+    post '/api/decrypt', {
+      cipher: c_id,
+      params: key_params.to_json,
+      source: 'container',
+      file: c_file
+    }
+    assert_equal 200, last_response.status
+    dec_data = JSON.parse(last_response.body)
+    assert_equal 'pesan.txt', dec_data['filename']
+    assert_equal 'Halo Kriptografi!', dec_data['text']
+    assert_equal true, dec_data['text_valid']
+    assert_equal bytes.unpack1('H*'), dec_data['plain_hex']
   end
 
   def test_inspect_endpoint
